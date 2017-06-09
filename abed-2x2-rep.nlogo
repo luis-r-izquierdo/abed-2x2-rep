@@ -146,6 +146,36 @@ to-report new-node
   report new
 end
 
+to-report new-all-C-strategy
+  let new new-random-strategy
+  ask new [
+    ask first-node [die]
+    set first-node new-all-X-node-with-action-?-from-round C 1
+  ]
+  report new
+end
+
+to-report new-all-D-strategy
+  let new new-random-strategy
+  ask new [
+    ask first-node [die]
+    set first-node new-all-X-node-with-action-?-from-round D 1
+  ]
+  report new
+end
+
+to-report new-all-X-node-with-action-?-from-round [a r]
+  let new new-node
+  ask new [
+    set action a
+    if r < n-of-rounds [
+      set next-node-if-partner-played-C new-all-X-node-with-action-?-from-round a (r + 1)
+      set next-node-if-partner-played-D new-all-X-node-with-action-?-from-round a (r + 1)
+    ]
+  ]
+  report new
+end
+
 to-report new-TFT-strategy
   let new new-random-strategy
   ask new [
@@ -1541,7 +1571,7 @@ n-of-rounds
 n-of-rounds
 1
 16
-3.0
+5.0
 1
 1
 NIL
@@ -1632,8 +1662,8 @@ CHOOSER
 288
 initial-condition
 initial-condition
-"random" "TFT"
-1
+"random" "all-C" "all-D" "TFT"
+2
 
 @#$#@#$#@
 ## WHAT IS IT?
