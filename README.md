@@ -5,4 +5,4 @@ ABED-2x2-rep is implemented in [NetLogo](http://ccl.northwestern.edu/netlogo/)
 
 [Luis R. Izquierdo](http://luis.izqui.org), [Segismundo S. Izquierdo](http://segis.izqui.org) & [Bill Sandholm](http://www.ssc.wisc.edu/~whs/)
 
-P.S. You may also be interested in [abed-1-pop](https://luis-r-izquierdo.github.io/abed-1-pop/) or [abed-2-pop](https://luis-r-izquierdo.github.io/abed-2-pop/)
+P.S. You may also be interested in [ABED-1pop](https://luis-r-izquierdo.github.io/abed-1pop/) or [ABED-2pop](https://luis-r-izquierdo.github.io/abed-2pop/)
