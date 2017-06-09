@@ -121,7 +121,7 @@ nodes-own [
   n-of-descendents
 ]
 
-to-report new-strategy
+to-report new-random-strategy
   let me self
   let new nobody
   hatch-strategies 1 [
@@ -142,6 +142,27 @@ to-report new-node
     set next-node-if-partner-played-C nobody
     set next-node-if-partner-played-D nobody
     set new self
+  ]
+  report new
+end
+
+to-report new-TFT-strategy
+  let new new-random-strategy
+  ask new [
+    ask first-node [die]
+    set first-node new-TFT-node-with-action-?-from-round-? C 1
+  ]
+  report new
+end
+
+to-report new-TFT-node-with-action-?-from-round-? [a r]
+  let new new-node
+  ask new [
+    set action a
+    if r < n-of-rounds [
+      set next-node-if-partner-played-C new-TFT-node-with-action-?-from-round-? C (r + 1)
+      set next-node-if-partner-played-D new-TFT-node-with-action-?-from-round-? D (r + 1)
+    ]
   ]
   report new
 end
@@ -222,7 +243,7 @@ to-report next-node-to-?-if-partner-action-is-? [current-node her-action]
 end
 
 to kill-yourself
-  ask first-node [kill-descendents]
+  ask first-node [ kill-descendents die ]
   die
 end
 
@@ -343,10 +364,11 @@ end
 
 to setup-agents
   create-players n-of-agents [
-    set my-strategy new-strategy
+    set my-strategy runresult (word "new-" initial-condition "-strategy") ;; inneficient, but beautiful :D
     set my-next-strategy my-strategy ;; to make sure that if you do not change next-strategy, you keep the same strategy
     set hidden? true
   ]
+
   ask players [
     set other-agents other players
   ]
@@ -510,7 +532,7 @@ end
 to update-strategy
   ifelse random-float 1 < prob-mutation
     [
-      set my-next-strategy new-strategy
+      set my-next-strategy new-random-strategy
     ]
     [run follow-rule]
 end
@@ -528,7 +550,7 @@ end
 to update-candidate-strategies-and-payoffs
   set candidates (turtle-set
     my-strategy
-    n-values (n-in-test-set - 1) [new-strategy]
+    n-values (n-in-test-set - 1) [new-random-strategy]
   )
   ;; we will have to kill the strategies that we do not select
   update-payoffs-of-strategies candidates
@@ -1112,7 +1134,7 @@ n-of-revisions-per-tick
 n-of-revisions-per-tick
 1
 n-of-agents
-5.0
+1.0
 1
 1
 NIL
@@ -1257,7 +1279,7 @@ CHOOSER
 decision-method
 decision-method
 "best" "logit" "proportional"
-1
+0
 
 TEXTBOX
 785
@@ -1281,10 +1303,10 @@ single-sample?
 -1000
 
 SWITCH
-26
-348
-232
-381
+33
+379
+239
+412
 trials-with-replacement?
 trials-with-replacement?
 1
@@ -1292,10 +1314,10 @@ trials-with-replacement?
 -1000
 
 SWITCH
-26
-312
-232
-345
+33
+343
+239
+376
 self-matching?
 self-matching?
 0
@@ -1441,10 +1463,10 @@ Plotting of output
 1
 
 TEXTBOX
-60
-289
-213
-307
+67
+320
+220
+338
 Secondary parameters\n
 12
 0.0
@@ -1519,7 +1541,7 @@ n-of-rounds
 n-of-rounds
 1
 16
-10.0
+3.0
 1
 1
 NIL
@@ -1601,6 +1623,16 @@ TEXTBOX
 for complete-matching = off
 11
 0.0
+1
+
+CHOOSER
+34
+243
+239
+288
+initial-condition
+initial-condition
+"random" "TFT"
 1
 
 @#$#@#$#@
