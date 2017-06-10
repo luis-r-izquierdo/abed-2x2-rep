@@ -552,7 +552,7 @@ to update-payoff-not-full-matching
 end
 
 to update-payoff-full-matching
-  play-vs-list-of-strategies [my-strategy] of population-to-play-with
+  play-vs-list-of-strategies [my-strategy] of ([population-to-play-with] of my-player)
 end
 
 ;;;;;;;;;;;;;;;;;;;;;;;
@@ -994,7 +994,7 @@ n-of-agents
 n-of-agents
 2
 1000
-100.0
+800.0
 1
 1
 NIL
@@ -1190,7 +1190,7 @@ n-of-trials
 n-of-trials
 1
 10
-1.0
+799.0
 1
 1
 NIL
@@ -1299,7 +1299,7 @@ CHOOSER
 candidate-selection
 candidate-selection
 "imitative" "direct"
-1
+0
 
 CHOOSER
 517
@@ -1309,7 +1309,7 @@ CHOOSER
 decision-method
 decision-method
 "best" "logit" "proportional"
-0
+2
 
 TEXTBOX
 785
@@ -1328,7 +1328,7 @@ SWITCH
 242
 single-sample?
 single-sample?
-1
+0
 1
 -1000
 
@@ -1350,7 +1350,7 @@ SWITCH
 376
 self-matching?
 self-matching?
-0
+1
 1
 -1000
 
@@ -1570,8 +1570,8 @@ SLIDER
 n-of-rounds
 n-of-rounds
 1
-16
-5.0
+10
+2.0
 1
 1
 NIL
@@ -1641,7 +1641,7 @@ SWITCH
 122
 complete-matching?
 complete-matching?
-1
+0
 1
 -1000
 
@@ -1663,7 +1663,7 @@ CHOOSER
 initial-condition
 initial-condition
 "random" "all-C" "all-D" "TFT"
-2
+0
 
 @#$#@#$#@
 ## WHAT IS IT?
