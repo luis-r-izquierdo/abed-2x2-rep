@@ -369,6 +369,7 @@ to startup
 
   reset-ticks
   setup-graphs
+  update-graphs
 
   setup-list-of-parameters
 end
@@ -702,8 +703,6 @@ to setup-graphs
     set-current-plot-pen "DD"    set-plot-pen-interval plot-every-?-secs
     set-current-plot-pen "CD/DC" set-plot-pen-interval plot-every-?-secs
     set-current-plot-pen "CC"    set-plot-pen-interval plot-every-?-secs
-
-  update-graphs
 end
 
 to setup-graph [s mode]
@@ -760,6 +759,11 @@ end
 to update-graphs
 
   if show-recent-history? or show-complete-history? [
+    if length possible-numbers-of-CCs != n-of-rounds + 1 [
+      setup-variables
+      setup-graphs
+    ]
+
     update-n-of-outcomes
     let total-n-of-matches (sum n-of-CC-outcomes-histogram)
 
@@ -994,7 +998,7 @@ n-of-agents
 n-of-agents
 2
 1000
-800.0
+100.0
 1
 1
 NIL
@@ -1190,7 +1194,7 @@ n-of-trials
 n-of-trials
 1
 10
-799.0
+99.0
 1
 1
 NIL
@@ -1571,7 +1575,7 @@ n-of-rounds
 n-of-rounds
 1
 10
-2.0
+4.0
 1
 1
 NIL
