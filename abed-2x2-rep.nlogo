@@ -833,11 +833,15 @@ to update-graphs
 
       set-current-plot "% C decisions in strategy pool"
         let nodes-who-respond-to-C nodes with [next-node-if-partner-played-C != nobody]
-        set-current-plot-pen "%C after C"
+        if any? nodes-who-respond-to-C [
+          set-current-plot-pen "%C after C"
           plotxy second-to-plot (count nodes-who-respond-to-C with [[action] of next-node-if-partner-played-C = C]) / count nodes-who-respond-to-C
+        ]
         let nodes-who-respond-to-D nodes with [next-node-if-partner-played-D != nobody]
-        set-current-plot-pen "%C after D"
-          plotxy second-to-plot (count nodes-who-respond-to-D with [[action] of next-node-if-partner-played-D = C]) / count nodes-who-respond-to-D
+        if any? nodes-who-respond-to-D [
+          set-current-plot-pen "%C after D"
+            plotxy second-to-plot (count nodes-who-respond-to-D with [[action] of next-node-if-partner-played-D = C]) / count nodes-who-respond-to-D
+        ]
     ]
   ]
 
