@@ -753,7 +753,7 @@ to update-n-of-outcomes
   foreach list-of-strategies [[s1] ->
     ask s1 [
       set l but-first l
-      if length l > 1 [play-vs-list-of-strategies l]
+      if length l > 0 [play-vs-list-of-strategies l]
     ]
   ]
 
@@ -1001,7 +1001,7 @@ n-of-agents
 n-of-agents
 2
 1000
-100.0
+10.0
 1
 1
 NIL
@@ -1031,7 +1031,7 @@ prob-mutation
 prob-mutation
 0
 1
-0.01
+1.0
 0.001
 1
 NIL
@@ -1156,7 +1156,7 @@ plot-every-?-secs
 plot-every-?-secs
 0.01
 5
-0.1
+0.5
 0.01
 1
 NIL
@@ -1197,7 +1197,7 @@ n-of-trials
 n-of-trials
 1
 10
-99.0
+1.0
 1
 1
 NIL
@@ -1335,7 +1335,7 @@ SWITCH
 242
 single-sample?
 single-sample?
-0
+1
 1
 -1000
 
@@ -1548,7 +1548,7 @@ DC-payoff
 DC-payoff
 0
 10
-4.0
+5.0
 1
 1
 NIL
@@ -1578,7 +1578,7 @@ n-of-rounds
 n-of-rounds
 1
 10
-4.0
+1.0
 1
 1
 NIL
@@ -1648,7 +1648,7 @@ SWITCH
 122
 complete-matching?
 complete-matching?
-0
+1
 1
 -1000
 
@@ -1670,7 +1670,7 @@ CHOOSER
 initial-condition
 initial-condition
 "random" "all-C" "all-D" "TFT"
-3
+0
 
 @#$#@#$#@
 ## WHAT IS IT?
