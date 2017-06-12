@@ -834,13 +834,35 @@ to update-graphs
       set-current-plot "% C decisions in strategy pool"
         let nodes-who-respond-to-C nodes with [next-node-if-partner-played-C != nobody]
         if any? nodes-who-respond-to-C [
-          set-current-plot-pen "%C after C"
-          plotxy second-to-plot (count nodes-who-respond-to-C with [[action] of next-node-if-partner-played-C = C]) / count nodes-who-respond-to-C
+
+          let C-nodes-who-respond-to-C nodes-who-respond-to-C with [action = C]
+          if any? C-nodes-who-respond-to-C [
+            set-current-plot-pen "%C after CC"
+            plotxy second-to-plot (count C-nodes-who-respond-to-C with [[action] of next-node-if-partner-played-C = C]) / count C-nodes-who-respond-to-C
+          ]
+
+          let D-nodes-who-respond-to-C nodes-who-respond-to-C with [action = D]
+          if any? D-nodes-who-respond-to-C [
+            set-current-plot-pen "%C after DC"
+            plotxy second-to-plot (count D-nodes-who-respond-to-C with [[action] of next-node-if-partner-played-C = C]) / count D-nodes-who-respond-to-C
+          ]
         ]
+
         let nodes-who-respond-to-D nodes with [next-node-if-partner-played-D != nobody]
         if any? nodes-who-respond-to-D [
-          set-current-plot-pen "%C after D"
-            plotxy second-to-plot (count nodes-who-respond-to-D with [[action] of next-node-if-partner-played-D = C]) / count nodes-who-respond-to-D
+
+          let C-nodes-who-respond-to-D nodes-who-respond-to-D with [action = C]
+          if any? C-nodes-who-respond-to-D [
+            set-current-plot-pen "%C after CD"
+            plotxy second-to-plot (count C-nodes-who-respond-to-D with [[action] of next-node-if-partner-played-D = C]) / count C-nodes-who-respond-to-D
+          ]
+
+          let D-nodes-who-respond-to-D nodes-who-respond-to-D with [action = D]
+          if any? D-nodes-who-respond-to-D [
+            set-current-plot-pen "%C after DD"
+            plotxy second-to-plot (count D-nodes-who-respond-to-D with [[action] of next-node-if-partner-played-D = C]) / count D-nodes-who-respond-to-D
+          ]
+
         ]
     ]
   ]
@@ -1217,7 +1239,7 @@ n-of-revisions-per-tick
 n-of-revisions-per-tick
 1
 n-of-agents
-10.0
+1.0
 1
 1
 NIL
@@ -1352,7 +1374,7 @@ CHOOSER
 candidate-selection
 candidate-selection
 "imitative" "direct"
-0
+1
 
 CHOOSER
 617
@@ -1716,7 +1738,7 @@ CHOOSER
 initial-condition
 initial-condition
 "random" "all-C" "all-D" "TFT"
-0
+3
 
 PLOT
 28
@@ -1754,8 +1776,10 @@ true
 true
 "" ""
 PENS
-"%C after C" 1.0 0 -14835848 true "" ""
-"%C after D" 1.0 0 -8630108 true "" ""
+"%C after CC" 1.0 0 -14835848 true "" ""
+"%C after CD" 1.0 0 -8630108 true "" ""
+"%C after DC" 1.0 0 -6459832 true "" ""
+"%C after DD" 1.0 0 -13345367 true "" ""
 
 @#$#@#$#@
 ## WHAT IS IT?
