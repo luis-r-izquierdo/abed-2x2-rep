@@ -830,6 +830,14 @@ to update-graphs
         set-plot-y-range 0 h
         set r (r + 1)
       ]
+
+      set-current-plot "% C decisions in strategy pool"
+        let nodes-who-respond-to-C nodes with [next-node-if-partner-played-C != nobody]
+        set-current-plot-pen "%C after C"
+          plotxy second-to-plot (count nodes-who-respond-to-C with [[action] of next-node-if-partner-played-C = C]) / count nodes-who-respond-to-C
+        let nodes-who-respond-to-D nodes with [next-node-if-partner-played-D != nobody]
+        set-current-plot-pen "%C after D"
+          plotxy second-to-plot (count nodes-who-respond-to-D with [[action] of next-node-if-partner-played-D = C]) / count nodes-who-respond-to-D
     ]
   ]
 
@@ -1057,15 +1065,15 @@ NIL
 HORIZONTAL
 
 SLIDER
-517
+617
 362
-668
+768
 395
 prob-mutation
 prob-mutation
 0
 1
-0.01
+0.005
 0.001
 1
 NIL
@@ -1205,7 +1213,7 @@ n-of-revisions-per-tick
 n-of-revisions-per-tick
 1
 n-of-agents
-1.0
+10.0
 1
 1
 NIL
@@ -1253,9 +1261,9 @@ NIL
 HORIZONTAL
 
 TEXTBOX
-679
+779
 346
-734
+834
 364
 for logit:
 11
@@ -1263,9 +1271,9 @@ for logit:
 1
 
 SLIDER
-679
+779
 362
-802
+902
 395
 eta
 eta
@@ -1278,9 +1286,9 @@ NIL
 HORIZONTAL
 
 CHOOSER
-678
+778
 297
-802
+902
 342
 tie-breaker
 tie-breaker
@@ -1288,9 +1296,9 @@ tie-breaker
 1
 
 TEXTBOX
-680
+780
 281
-777
+877
 299
 for best:
 11
@@ -1343,9 +1351,9 @@ candidate-selection
 0
 
 CHOOSER
-517
+617
 289
-668
+768
 334
 decision-method
 decision-method
@@ -1396,10 +1404,10 @@ self-matching?
 -1000
 
 PLOT
-22
-424
-369
-651
+379
+779
+726
+970
 Matches with # number of CC outcomes (recent)
 milliseconds
 NIL
@@ -1494,9 +1502,9 @@ Candidate selection
 1
 
 TEXTBOX
-517
+617
 346
-667
+767
 364
 mutations:
 11
@@ -1504,9 +1512,9 @@ mutations:
 1
 
 TEXTBOX
-611
+711
 261
-741
+841
 279
 Decision method
 13
@@ -1612,17 +1620,17 @@ n-of-rounds
 n-of-rounds
 1
 10
-6.0
+4.0
 1
 1
 NIL
 HORIZONTAL
 
 PLOT
-810
-262
-1045
-415
+731
+779
+1043
+969
 Number of CC outcomes (complete)
 seconds
 NIL
@@ -1663,8 +1671,8 @@ BUTTON
 384
 496
 417
-NIL
-draw one-of strategies
+plot a successful strategy
+draw one-of strategies with-max [payoff]
 NIL
 1
 T
@@ -1707,10 +1715,10 @@ initial-condition
 0
 
 PLOT
-22
-779
-365
-972
+28
+424
+371
+651
 Outcomes per round
 round
 NIL
@@ -1725,6 +1733,25 @@ PENS
 "DD" 1.0 1 -2674135 true "" ""
 "CD/DC" 1.0 1 -1184463 true "" ""
 "CC" 1.0 1 -13840069 true "" ""
+
+PLOT
+21
+779
+374
+970
+% C decisions in strategy pool
+NIL
+NIL
+0.0
+1.0
+0.0
+1.0
+true
+true
+"" ""
+PENS
+"%C after C" 1.0 0 -14835848 true "" ""
+"%C after D" 1.0 0 -8630108 true "" ""
 
 @#$#@#$#@
 ## WHAT IS IT?
