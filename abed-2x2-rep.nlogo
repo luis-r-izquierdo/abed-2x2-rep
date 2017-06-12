@@ -68,6 +68,10 @@ globals [
 
   n-of-CC-outcomes-in-match
   n-of-CC-outcomes-histogram
+  outcomes-in-each-round
+    ;; list with n-of-rounds elements, where each element is
+    ;; a two-number list: the first one is the number of CC outcomes
+    ;; in the round; the second number is the number of DD outcomes.
 ]
 
 
@@ -207,7 +211,8 @@ end
 
 ;; All the data in the following 2 procedures is collected only for plotting purposes.
 ;; Consider creating two versions of the procedures to increase speed.
-;; (the most demanding line is the last line in the following procedure)
+;; The most demanding lines are the ones involving add-one-in-pos-?1-of-list-?2 and
+;; add-one-in-row-?1-column-?2-of-matrix-?3.
 
 to play-vs-strategy [str]
   set n-of-CC-outcomes-in-match 0
@@ -216,18 +221,21 @@ to play-vs-strategy [str]
   let her-current-node ([first-node] of str)
   let my-action [action] of my-current-node
   let her-action [action] of her-current-node
-  let this-match-payoff payoff-for my-action her-action
+  let this-match-payoff payoff-for my-action her-action 1
 
-  ;; repeat (n-of-rounds - 1) [
+  let r 2
   repeat (length possible-numbers-of-CCs - 2) [
+    ;; we could write: repeat (n-of-rounds - 1) [
+    ;; but we do it this way to make sure that n-of-rounds
+    ;; can be modified at runtime safely
     ;; possible-numbers-of-CCs should be (n-of-rounds + 1) long
-    ;; we do this to make sure that n-of-rounds can be modified at runtime safley
     set my-current-node next-node-to-?-if-partner-action-is-? my-current-node her-action
     set her-current-node next-node-to-?-if-partner-action-is-? her-current-node my-action
 
     set my-action [action] of my-current-node
     set her-action [action] of her-current-node
-    set this-match-payoff (this-match-payoff + payoff-for my-action her-action)
+    set this-match-payoff (this-match-payoff + payoff-for my-action her-action r)
+    set r (r + 1)
   ]
 
   set payoff (payoff + this-match-payoff)
@@ -235,7 +243,7 @@ to play-vs-strategy [str]
   set n-of-CC-outcomes-histogram add-one-in-pos-?1-of-list-?2 n-of-CC-outcomes-in-match n-of-CC-outcomes-histogram
 end
 
-to-report payoff-for [my-action her-action]
+to-report payoff-for [my-action her-action r]
   set n-of-outcomes (n-of-outcomes + 1)
 
   ifelse (my-action = C)
@@ -243,13 +251,18 @@ to-report payoff-for [my-action her-action]
       [
         set n-of-CC-outcomes (n-of-CC-outcomes + 1)
         set n-of-CC-outcomes-in-match (n-of-CC-outcomes-in-match + 1)
+        set outcomes-in-each-round add-one-in-row-?1-column-?2-of-matrix-?3 r 1 outcomes-in-each-round
         report CC-payoff
       ]
       [report CD-payoff]
     ]
     [ifelse (her-action = C)
       [report DC-payoff]
-      [set n-of-DD-outcomes (n-of-DD-outcomes + 1) report DD-payoff]
+      [
+        set n-of-DD-outcomes (n-of-DD-outcomes + 1)
+        set outcomes-in-each-round add-one-in-row-?1-column-?2-of-matrix-?3 r 2 outcomes-in-each-round
+        report DD-payoff
+      ]
     ]
 end
 
@@ -382,6 +395,7 @@ to setup-variables
   set D 1
   set possible-numbers-of-CCs range (n-of-rounds + 1)
   set n-of-CC-outcomes-histogram n-values (n-of-rounds + 1) [0]
+  set outcomes-in-each-round n-values n-of-rounds [[0 0]]
 
   ;; for efficiency
   set max-column-difference-payoffs n-of-rounds * max ( list (abs (CC-payoff - DC-payoff)) (abs (CD-payoff - DD-payoff)) )
@@ -741,6 +755,7 @@ to update-n-of-outcomes
   set n-of-DD-outcomes 0
   set n-of-outcomes 0
   set n-of-CC-outcomes-histogram n-values (n-of-rounds + 1) [0]
+  set outcomes-in-each-round n-values n-of-rounds [[0 0]]
 
   let list-of-strategies [my-strategy] of players
   if self-matching? [
@@ -802,6 +817,19 @@ to update-graphs
         set-current-plot-pen "CD/DC" plotxy second-to-plot (n-of-outcomes - n-of-DD-outcomes)
         set-current-plot-pen "CC"    plotxy second-to-plot n-of-CC-outcomes
         set-plot-y-range 0 n-of-outcomes
+
+      set-current-plot "Outcomes per round"
+      clear-plot
+      let r 1
+      let h (n-of-outcomes / n-of-rounds)
+      foreach outcomes-in-each-round [[l] ->
+        set-current-plot-pen "DD"    plotxy r h
+        set-current-plot-pen "CD/DC" plotxy r (h - last l)
+        set-current-plot-pen "CC"    plotxy r first l
+        set-plot-x-range 1 (n-of-rounds + 1)
+        set-plot-y-range 0 h
+        set r (r + 1)
+      ]
     ]
   ]
 
@@ -837,6 +865,12 @@ end
 
 to-report add-one-in-pos-?1-of-list-?2 [pos l]
   report replace-item pos l ((item pos l) + 1)
+end
+
+to-report add-one-in-row-?1-column-?2-of-matrix-?3 [row col m]
+  let r-list item (row - 1) m
+  set r-list add-one-in-pos-?1-of-list-?2 (col - 1) r-list
+  report replace-item (row - 1) m r-list
 end
 
 to-report first-positive-position [l]
@@ -1001,7 +1035,7 @@ n-of-agents
 n-of-agents
 2
 1000
-10.0
+100.0
 1
 1
 NIL
@@ -1031,7 +1065,7 @@ prob-mutation
 prob-mutation
 0
 1
-1.0
+0.01
 0.001
 1
 NIL
@@ -1197,7 +1231,7 @@ n-of-trials
 n-of-trials
 1
 10
-1.0
+99.0
 1
 1
 NIL
@@ -1306,7 +1340,7 @@ CHOOSER
 candidate-selection
 candidate-selection
 "imitative" "direct"
-1
+0
 
 CHOOSER
 517
@@ -1335,7 +1369,7 @@ SWITCH
 242
 single-sample?
 single-sample?
-1
+0
 1
 -1000
 
@@ -1548,7 +1582,7 @@ DC-payoff
 DC-payoff
 0
 10
-5.0
+4.0
 1
 1
 NIL
@@ -1578,7 +1612,7 @@ n-of-rounds
 n-of-rounds
 1
 10
-1.0
+6.0
 1
 1
 NIL
@@ -1621,7 +1655,7 @@ true
 "" ""
 PENS
 "DD" 1.0 1 -2674135 true "" ""
-"CD/DC" 1.0 1 -1 true "" ""
+"CD/DC" 1.0 1 -1184463 true "" ""
 "CC" 1.0 1 -13840069 true "" ""
 
 BUTTON
@@ -1648,7 +1682,7 @@ SWITCH
 122
 complete-matching?
 complete-matching?
-1
+0
 1
 -1000
 
@@ -1671,6 +1705,26 @@ initial-condition
 initial-condition
 "random" "all-C" "all-D" "TFT"
 0
+
+PLOT
+22
+779
+365
+972
+Outcomes per round
+round
+NIL
+1.0
+1.0
+0.0
+1.0
+true
+true
+"" ""
+PENS
+"DD" 1.0 1 -2674135 true "" ""
+"CD/DC" 1.0 1 -1184463 true "" ""
+"CC" 1.0 1 -13840069 true "" ""
 
 @#$#@#$#@
 ## WHAT IS IT?
