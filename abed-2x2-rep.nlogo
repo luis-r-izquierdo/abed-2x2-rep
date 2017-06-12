@@ -218,7 +218,10 @@ to play-vs-strategy [str]
   let her-action [action] of her-current-node
   let this-match-payoff payoff-for my-action her-action
 
-  repeat (n-of-rounds - 1) [
+  ;; repeat (n-of-rounds - 1) [
+  repeat (length possible-numbers-of-CCs - 2) [
+    ;; possible-numbers-of-CCs should be (n-of-rounds + 1) long
+    ;; we do this to make sure that n-of-rounds can be modified at runtime safley
     set my-current-node next-node-to-?-if-partner-action-is-? my-current-node her-action
     set her-current-node next-node-to-?-if-partner-action-is-? her-current-node my-action
 
@@ -1028,7 +1031,7 @@ prob-mutation
 prob-mutation
 0
 1
-0.001
+0.01
 0.001
 1
 NIL
@@ -1303,7 +1306,7 @@ CHOOSER
 candidate-selection
 candidate-selection
 "imitative" "direct"
-0
+1
 
 CHOOSER
 517
@@ -1313,7 +1316,7 @@ CHOOSER
 decision-method
 decision-method
 "best" "logit" "proportional"
-2
+0
 
 TEXTBOX
 785
@@ -1667,7 +1670,7 @@ CHOOSER
 initial-condition
 initial-condition
 "random" "all-C" "all-D" "TFT"
-0
+3
 
 @#$#@#$#@
 ## WHAT IS IT?
